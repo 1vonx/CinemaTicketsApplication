@@ -1,0 +1,34 @@
+﻿using CinemaTicketsApp.Domain;
+using CinemaTicketsApp.Domain.DomainModels;
+using CinemaTicketsApp.Domain.Identity;
+using CinemaTicketsApp.Repository.Interface;
+using CinemaTicketsApp.Service.Interface;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace CinemaTicketsApp.Service.Implementation
+{
+    public class OrderService : IOrderService
+    {
+        private readonly IOrderRepository _orderRepository;
+        private readonly IUserRepository _userRepository;
+
+        public OrderService(IOrderRepository orderRepository, IUserRepository userRepository)
+        {
+            _orderRepository = orderRepository;
+            _userRepository = userRepository;
+        }
+     
+        public List<Order> GetAllOrders(string userId)
+        {
+                var loggedInUser = this._userRepository.Get(userId).Id;
+                return this._orderRepository.GetAllOrders(loggedInUser);
+        }
+
+        public Order GetOrderDetails(BaseEntity model)
+        {
+            return this._orderRepository.GetOrderDetails(model);
+        }
+    }
+}
